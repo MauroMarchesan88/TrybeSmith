@@ -1,12 +1,14 @@
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import ProductsRoutes from './routes/products.routes';
+import UserRoutes from './routes/users.routes';
 
 const app = express();
 
 app.use(express.json());
 
 app.use(ProductsRoutes);
+app.use(UserRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;
