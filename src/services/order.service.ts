@@ -13,6 +13,12 @@ class OrderService {
     const Orders = await this.model.getAll();
     return Orders;
   }
+
+  public async getProductsByOrderID(order: Order): Promise<Order[]> {
+    const orderId = order.id;
+    const products = await this.model.getProductsByOrderID(orderId);
+    return products;
+  }
 }
 
 export default OrderService;

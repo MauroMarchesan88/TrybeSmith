@@ -5,6 +5,6 @@ const router = Router();
 
 const orderController = new OrderController();
 
-router.get('/orders', orderController.getAll);
+router.get('/orders', orderController.getAllOrders);
 
 export default router;
