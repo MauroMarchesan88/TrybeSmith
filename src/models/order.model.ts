@@ -9,20 +9,17 @@ export default class ProductModel {
   }
 
   public async getAll(): Promise<Order[]> {
-    // const query = 'SELECT a.id, a.userId, b.id AS "productsIds" FROM Trybesmith.Orders a INNER JOIN Trybesmith.Products b ON a.id=b.orderId';
-
     const result = await this.connection
-      .execute('SELECT * FROM Trybesmith.Orders');
+      .execute('SELECT id, userId FROM Trybesmith.Orders ORDER BY userId');
     const [rows] = result;
     return rows as Order[];
   }
 
-  public async getProductsByOrderID(orderId: number | undefined): Promise<[]> {
-    // const query = 'SELECT a.id, a.userId, b.id AS "productsIds" FROM Trybesmith.Orders a INNER JOIN Trybesmith.Products b ON a.id=b.orderId';
-
+  public async getProductsByOrderID(orderId: number | undefined): Promise<number[]> {
     const result = await this.connection
       .execute('SELECT id FROM Trybesmith.Products WHERE orderId = ?', [orderId]);
     const [rows] = result;
-    return rows as [];
+    const ids = (JSON.parse(JSON.stringify(rows))).map((elem: { id:number }) => elem.id);
+    return ids as [];
   }
 }

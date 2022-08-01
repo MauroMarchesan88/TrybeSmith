@@ -14,7 +14,7 @@ class OrderService {
     return Orders;
   }
 
-  public async getProductsByOrderID(order: Order): Promise<Order[]> {
+  public async getProductsByOrderID(order: Order): Promise<number[]> {
     const orderId = order.id;
     const products = await this.model.getProductsByOrderID(orderId);
     return products;
