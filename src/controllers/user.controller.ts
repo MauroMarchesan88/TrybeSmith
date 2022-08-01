@@ -8,11 +8,8 @@ class UserController {
 
   public create = async (req: Request, res: Response) => {
     const { username, classe, level, password } = req.body;
-    console.log('xablau');
     const token = createToken({ username, classe, level, password });
-    console.log(token);
     const [users] = await this.userService.create({ username, classe, level, password });
-    console.log(users);
     res.status(StatusCodes.CREATED).json({ users, token });
   };
 }
