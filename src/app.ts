@@ -16,10 +16,10 @@ app.use(LoginRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;
-  console.log(`name: ${name}`);
-  
+
   switch (name) {
     case 'ValidationError':
+      if (message.includes('must be'))res.status(422).json({ message: details[0].message });
       res.status(400).json({ message: details[0].message });
       break;
     case 'NotFoundError':
@@ -29,7 +29,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
       res.status(409).json({ message });
       break;
     default:
-      console.error(err);
       res.sendStatus(500);
   }
   
