@@ -40,9 +40,9 @@ class OrdersController {
         message: '"productsIds" must include only numbers' });
     }
     validateProductsIds({ productsIds, authorization });
-    const userId = await this.orderService.getUserId(username);
-    console.log({ userId, productsIds });
-   
+    const userId: number = await this.orderService.getUserId(username);
+    await this.orderService.create(userId, productsIds);
+
     res.status(StatusCodes.CREATED).json({ userId, productsIds });
   };
 }
