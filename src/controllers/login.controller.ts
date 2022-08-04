@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import LoginService from '../services/login.service';
-import createToken from '../utils/jwt';
+import { createToken } from '../utils/jwt';
 import { validateLogin } from '../utils/validation';
 
 class LoginController {

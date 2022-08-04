@@ -24,6 +24,18 @@ export function validateProduct(data: object) {
   return value;
 }
 
+export function validateProductsIds(data: object) {
+  const schema = Joi.object({
+    productsIds: Joi.array().items(Joi.number()),
+    authorization: Joi.string(),
+  });
+
+  const { error, value } = schema.validate(data);
+  if (error) throw error;
+
+  return value;
+}
+
 export function validateUser(data: object) {
   const schema = Joi.object({
     username: Joi.string().min(3).required(),
@@ -37,3 +49,5 @@ export function validateUser(data: object) {
 
   return value;
 }
+
+// export function validatePrivilege()

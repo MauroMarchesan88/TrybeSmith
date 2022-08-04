@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import UsersService from '../services/users.service';
-import createToken from '../utils/jwt';
+import { createToken } from '../utils/jwt';
 import { validateUser } from '../utils/validation';
 
 class UserController {

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Order from '../interfaces/order.interface';
 import OrderService from '../services/order.service';
+import { validateToken } from '../utils/jwt';
+import { validateProductsIds } from '../utils/validation';
 
 class OrdersController {
   constructor(private orderService = new OrderService()) { }
@@ -21,6 +23,27 @@ class OrdersController {
     const finalResponse = halfwayResponse.sort((a: any, b: any) => (a.userId < b.userId ? -1 : 1));
 
     res.status(StatusCodes.OK).json(finalResponse);
+  };
+
+  public create = async (req: Request, res: Response) => {
+    const { productsIds } = req.body;
+    const { authorization } = req.headers;
+    if (!productsIds) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: '"productsIds" is required' });
+    }
+    if (!authorization) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token not found' });
+    }
+    const { username } = validateToken(authorization);
+    if (productsIds.length === 0) {
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        message: '"productsIds" must include only numbers' });
+    }
+    validateProductsIds({ productsIds, authorization });
+    const userId = await this.orderService.getUserId(username);
+    console.log({ userId, productsIds });
+   
+    res.status(StatusCodes.CREATED).json({ userId, productsIds });
   };
 }
 

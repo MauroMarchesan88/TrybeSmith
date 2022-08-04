@@ -4,9 +4,12 @@ const options: SignOptions = {
   algorithm: 'HS256',
 };
 
-const createToken = (username: string, password: string) => {
+export const createToken = (username: string, password: string) => {
   const token = jwt.sign({ username, password }, 'my_super_secret', options);
   return token;
 };
 
-export default createToken;
+export const validateToken = (token: string) => {
+  const userData = jwt.verify(token, 'my_super_secret', options);
+  return userData as { username: string };
+};

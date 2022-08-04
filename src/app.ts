@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
+import { StatusCodes } from 'http-status-codes';
 import LoginRoutes from './routes/login.routes';
 import OrderRoutes from './routes/orders.routes';
 import ProductsRoutes from './routes/products.routes';
@@ -16,17 +17,18 @@ app.use(LoginRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;
-
   switch (name) {
     case 'ValidationError':
-      if (message.includes('must be'))res.status(422).json({ message: details[0].message });
-      res.status(400).json({ message: details[0].message });
+      if (message.includes('must be')) {
+        res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ message: details[0].message });
+      }
+      res.status(StatusCodes.BAD_REQUEST).json({ message: details[0].message });
       break;
     case 'NotFoundError':
-      res.status(404).json({ message });
+      res.status(StatusCodes.NOT_FOUND).json({ message });
       break;
-    case 'ConflictError':
-      res.status(409).json({ message });
+    case 'JsonWebTokenError':
+      res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid token' });
       break;
     default:
       res.sendStatus(500);
